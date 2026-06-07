@@ -188,7 +188,7 @@ export default function FeedbackManager() {
                 </div>
                 <button
                   onClick={() => fetchCorrectionRequests(true)}
-                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 active:scale-95 active:bg-zinc-100 transition-all dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:active:bg-zinc-800"
                 >
                   새로고침
                 </button>
@@ -302,7 +302,7 @@ export default function FeedbackManager() {
                 </div>
                 <button
                   onClick={() => fetchInquiries(true)}
-                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 active:scale-95 active:bg-zinc-100 transition-all dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:active:bg-zinc-800"
                 >
                   새로고침
                 </button>
