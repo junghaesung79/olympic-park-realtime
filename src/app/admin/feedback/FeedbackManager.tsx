@@ -97,8 +97,8 @@ export default function FeedbackManager() {
             <thead className="bg-zinc-50 text-xs uppercase text-zinc-700 dark:bg-zinc-900 dark:text-zinc-350">
               <tr>
                 <th className="px-4 py-3">구분</th>
-                <th className="px-4 py-3">내용</th>
                 <th className="px-4 py-3">작성일시</th>
+                <th className="px-4 py-3">내용</th>
                 <th className="px-4 py-3 text-right">관리</th>
               </tr>
             </thead>
@@ -118,11 +118,11 @@ export default function FeedbackManager() {
                     <td className="px-4 py-4 font-semibold text-zinc-900 dark:text-zinc-200 whitespace-nowrap">
                       {item.type}
                     </td>
-                    <td className="px-4 py-4 break-all whitespace-pre-wrap max-w-xl">
-                      {item.content}
-                    </td>
                     <td className="px-4 py-4 text-xs text-zinc-400 whitespace-nowrap">
                       {new Date(item.created_at).toLocaleString("ko-KR")}
+                    </td>
+                    <td className="px-4 py-4 break-all whitespace-pre-wrap max-w-xl">
+                      {item.content}
                     </td>
                     <td className="px-4 py-4 text-right whitespace-nowrap">
                       <button
