@@ -34,7 +34,6 @@ export default function ThemeToggle() {
       aria-label="라이트/다크 모드 전환"
       className="flex h-8 items-center gap-1.5 rounded-full border border-zinc-300 px-3 text-sm text-zinc-600 transition hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500"
     >
-      <span>{isDark ? "🌙" : "☀️"}</span>
       <span>{isDark ? "다크" : "라이트"}</span>
     </button>
   );

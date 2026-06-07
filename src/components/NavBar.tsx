@@ -16,7 +16,7 @@ export default function NavBar() {
       <nav className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <Link href="/" className="text-lg font-bold">
-            올림픽공원 실시간
+            홈
           </Link>
           <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
             {links.slice(1).map((link) => (
