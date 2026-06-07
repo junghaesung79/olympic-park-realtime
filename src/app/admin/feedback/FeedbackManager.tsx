@@ -191,7 +191,7 @@ export default function FeedbackManager() {
                   disabled={correctionLoading}
                   className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 disabled:opacity-50"
                 >
-                  {correctionLoading ? "불러오는 중..." : "새로고침"}
+                  새로고침
                 </button>
               </div>
             </div>
@@ -306,7 +306,7 @@ export default function FeedbackManager() {
                   disabled={inquiryLoading}
                   className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 disabled:opacity-50"
                 >
-                  {inquiryLoading ? "불러오는 중..." : "새로고침"}
+                  새로고침
                 </button>
               </div>
             </div>
