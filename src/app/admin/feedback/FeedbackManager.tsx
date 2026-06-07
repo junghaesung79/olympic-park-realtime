@@ -188,14 +188,13 @@ export default function FeedbackManager() {
                 </div>
                 <button
                   onClick={() => fetchCorrectionRequests(true)}
-                  disabled={correctionLoading}
-                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 disabled:opacity-50"
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
                   새로고침
                 </button>
               </div>
             </div>
-            <div className={`overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800 transition-opacity duration-200 ${correctionLoading ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   <tr>
@@ -303,14 +302,13 @@ export default function FeedbackManager() {
                 </div>
                 <button
                   onClick={() => fetchInquiries(true)}
-                  disabled={inquiryLoading}
-                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 disabled:opacity-50"
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
                   새로고침
                 </button>
               </div>
             </div>
-            <div className={`overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800 transition-opacity duration-200 ${inquiryLoading ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   <tr>
