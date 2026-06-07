@@ -163,7 +163,7 @@ export default function FeedbackManager() {
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2.5">
                   <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">상태 필터:</span>
-                  {["보류", "반영", "숨김"].map((status) => (
+                  {["보류", "완료", "숨김"].map((status) => (
                     <label
                       key={status}
                       className="flex items-center gap-1.5 text-xs cursor-pointer select-none text-zinc-700 dark:text-zinc-300"
@@ -227,25 +227,25 @@ export default function FeedbackManager() {
                           {item.content}
                         </td>
                         <td className="px-4 py-4 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1">
+                          <div className="flex items-center justify-end gap-1.5">
                             <button
                               type="button"
-                              onClick={() => handleUpdateStatus(item.id, "반영")}
-                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
-                                item.status === "반영"
-                                  ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-900"
-                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              onClick={() => handleUpdateStatus(item.id, "완료")}
+                              className={`rounded px-2.5 py-1 text-xs font-semibold border transition-all active:scale-95 ${
+                                item.status === "완료"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-250 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/60"
+                                  : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                               }`}
                             >
-                              ✓ 반영
+                              ✓ 완료
                             </button>
                             <button
                               type="button"
                               onClick={() => handleUpdateStatus(item.id, "숨김")}
-                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                              className={`rounded px-2.5 py-1 text-xs font-semibold border transition-all active:scale-95 ${
                                 item.status === "숨김"
-                                  ? "bg-red-100 text-red-850 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900"
-                                  : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                                  ? "bg-rose-50 text-rose-700 border-rose-250 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900/60"
+                                  : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                               }`}
                             >
                               ✗ 숨김
@@ -253,10 +253,10 @@ export default function FeedbackManager() {
                             <button
                               type="button"
                               onClick={() => handleUpdateStatus(item.id, "보류")}
-                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                              className={`rounded px-2.5 py-1 text-xs font-semibold border transition-all active:scale-95 ${
                                 item.status === "보류" || !item.status
-                                  ? "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
-                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                                  ? "bg-amber-50 text-amber-700 border-amber-250 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/60"
+                                  : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                               }`}
                             >
                               = 보류
@@ -277,7 +277,7 @@ export default function FeedbackManager() {
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2.5">
                   <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">상태 필터:</span>
-                  {["보류", "반영", "숨김"].map((status) => (
+                  {["보류", "완료", "숨김"].map((status) => (
                     <label
                       key={status}
                       className="flex items-center gap-1.5 text-xs cursor-pointer select-none text-zinc-700 dark:text-zinc-300"
@@ -341,25 +341,25 @@ export default function FeedbackManager() {
                           {item.content}
                         </td>
                         <td className="px-4 py-4 text-right whitespace-nowrap">
-                          <div className="flex items-center justify-end gap-1">
+                          <div className="flex items-center justify-end gap-1.5">
                             <button
                               type="button"
-                              onClick={() => handleUpdateStatus(item.id, "반영")}
-                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
-                                item.status === "반영"
-                                  ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-900"
-                                  : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              onClick={() => handleUpdateStatus(item.id, "완료")}
+                              className={`rounded px-2.5 py-1 text-xs font-semibold border transition-all active:scale-95 ${
+                                item.status === "완료"
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-250 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/60"
+                                  : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                               }`}
                             >
-                              ✓ 반영
+                              ✓ 완료
                             </button>
                             <button
                               type="button"
                               onClick={() => handleUpdateStatus(item.id, "숨김")}
-                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                              className={`rounded px-2.5 py-1 text-xs font-semibold border transition-all active:scale-95 ${
                                 item.status === "숨김"
-                                  ? "bg-red-100 text-red-855 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900"
-                                  : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                                  ? "bg-rose-50 text-rose-700 border-rose-250 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900/60"
+                                  : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                               }`}
                             >
                               ✗ 숨김
@@ -367,10 +367,10 @@ export default function FeedbackManager() {
                             <button
                               type="button"
                               onClick={() => handleUpdateStatus(item.id, "보류")}
-                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                              className={`rounded px-2.5 py-1 text-xs font-semibold border transition-all active:scale-95 ${
                                 item.status === "보류" || !item.status
-                                  ? "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
-                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                                  ? "bg-amber-50 text-amber-700 border-amber-250 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/60"
+                                  : "bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100 hover:text-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:border-zinc-800 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
                               }`}
                             >
                               = 보류
