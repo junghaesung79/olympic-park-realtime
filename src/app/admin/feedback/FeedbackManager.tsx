@@ -119,6 +119,14 @@ export default function FeedbackManager() {
       .eq("id", id);
     if (error) {
       alert("상태 변경 실패: " + error.message);
+    } else {
+      // DB 업데이트가 성공하면 즉시 로컬 상태도 업데이트하여 화면에 반영되도록 함
+      setCorrectionRequests((current) =>
+        current.map((f) => (f.id === id ? { ...f, status: newStatus } : f))
+      );
+      setInquiries((current) =>
+        current.map((f) => (f.id === id ? { ...f, status: newStatus } : f))
+      );
     }
   };
 
