@@ -42,14 +42,14 @@ function FormSection({
             setValue(e.target.value);
             setSubmitted(false);
           }}
-          className="w-full rounded-md border border-zinc-300 bg-transparent p-3 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:focus:border-zinc-400"
+          className="w-full resize-none rounded-md border border-zinc-300 bg-transparent p-3 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:focus:border-zinc-400"
         />
         <div className="flex items-center gap-3">
           <button
             type="submit"
             className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium transition hover:border-zinc-500 dark:border-zinc-700 dark:hover:border-zinc-400"
           >
-            제출하기
+            보내기
           </button>
           {submitted && (
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
