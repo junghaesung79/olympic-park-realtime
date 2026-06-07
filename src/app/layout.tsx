@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import Footer from "@/components/Footer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const pretendard = localFont({
@@ -59,6 +60,7 @@ export default function RootLayout({
         <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-8">
           {children}
         </div>
+        <Footer />
       </body>
     </html>
   );

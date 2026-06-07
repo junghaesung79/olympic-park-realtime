@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "지도",
@@ -25,8 +26,14 @@ export default function MapPage() {
         </p>
       </header>
 
-      <div className="flex h-72 items-center justify-center rounded-lg border border-dashed border-zinc-300 text-sm text-zinc-400 dark:border-zinc-700">
-        지도 영역 (추후 연동 예정)
+      <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
+        <Image
+          src="/map-naver.png"
+          alt="올림픽공원 일대 지도 (네이버 지도)"
+          width={2940}
+          height={1668}
+          className="h-auto w-full"
+        />
       </div>
 
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
