@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "라이브스트림 · SNS",
@@ -15,7 +17,18 @@ const sns = [
   { label: "공식 텔레그램 채널 (예시)", url: "https://example.com/telegram" },
 ];
 
-export default function LinksPage() {
+export default async function LinksPage() {
+  const headersList = await headers();
+  const host = headersList.get("host") || "";
+  const isLocal =
+    host.includes("localhost") ||
+    host.includes("127.0.0.1") ||
+    host.includes("[::1]");
+
+  if (!isLocal) {
+    redirect("/");
+  }
+
   return (
     <main className="flex flex-1 flex-col gap-8">
       <header>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { supabase } from "@/lib/supabase";
 
 function FormSection({
   id,
@@ -15,11 +16,28 @@ function FormSection({
 }) {
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!value.trim()) return;
-    setSubmitted(true);
+    if (!value.trim() || submitting) return;
+    setSubmitting(true);
+
+    try {
+      const typeLabel = id === "correction-request" ? "정보 수정 요청" : "문의사항";
+      const { error } = await supabase
+        .from("feedbacks")
+        .insert([{ type: typeLabel, content: value }]);
+
+      if (error) throw error;
+
+      setSubmitted(true);
+      setValue("");
+    } catch (err: any) {
+      alert("전송 실패: " + err.message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -42,19 +60,20 @@ function FormSection({
             setValue(e.target.value);
             setSubmitted(false);
           }}
-          className="w-full resize-none rounded-md border border-zinc-300 bg-transparent p-3 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:focus:border-zinc-400"
+          disabled={submitting}
+          className="w-full resize-none rounded-md border border-zinc-300 bg-transparent p-3 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:focus:border-zinc-400 disabled:opacity-50"
         />
         <div className="flex items-center gap-3">
           <button
             type="submit"
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium transition hover:border-zinc-500 dark:border-zinc-700 dark:hover:border-zinc-400"
+            disabled={submitting}
+            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium transition hover:border-zinc-500 dark:border-zinc-700 dark:hover:border-zinc-400 disabled:opacity-50"
           >
-            보내기
+            {submitting ? "보내는 중..." : "보내기"}
           </button>
           {submitted && (
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
-              접수되었습니다. 검토 후 반영하겠습니다. (전송 기능은 추후 연동
-              예정입니다)
+              접수되었습니다. 확인 후 조치하겠습니다.
             </span>
           )}
         </div>

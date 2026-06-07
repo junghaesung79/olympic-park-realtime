@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import PresenceTracker from "@/components/PresenceTracker";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const pretendard = localFont({
@@ -61,6 +62,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <PresenceTracker />
       </body>
     </html>
   );

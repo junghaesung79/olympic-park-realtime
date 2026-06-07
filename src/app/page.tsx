@@ -8,8 +8,9 @@ const staticInfo = [
   },
   {
     href: "/info/emergency",
-    title: "비상 연락망",
+    title: "비상 연락망 (준비 중)",
     description: "응급 상황 발생 시 연락할 수 있는 번호와 위치 안내",
+    disabled: true,
   },
 ];
 
@@ -17,12 +18,13 @@ const featured = [
   {
     href: "/map",
     title: "지도",
-    description: "집결 장소, 주차/대중교통, 화장실·식수·휴게 공간 위치",
+    description: "올림픽공원 주변 지역 지도와 핸드볼경기장 좌석 및 출입구 안내",
   },
   {
     href: "/links",
-    title: "라이브스트림 · SNS",
+    title: "라이브스트림 · SNS (준비 중)",
     description: "공식 라이브 방송과 SNS 계정 모음",
+    disabled: true,
   },
   {
     href: "/feedback",
@@ -49,18 +51,30 @@ export default function Home() {
           <ul className="mt-3 divide-y divide-zinc-200 dark:divide-zinc-800">
             {staticInfo.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="flex items-center justify-between gap-4 py-4 transition hover:text-zinc-950 dark:hover:text-zinc-50"
-                >
-                  <span>
-                    <span className="font-medium">{item.title}</span>
-                    <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
-                      {item.description}
+                {item.disabled ? (
+                  <div className="flex items-center justify-between gap-4 py-4 text-zinc-400 dark:text-zinc-600 cursor-not-allowed select-none">
+                    <span>
+                      <span className="font-medium">{item.title}</span>
+                      <span className="mt-0.5 block text-sm text-zinc-500">
+                        {item.description}
+                      </span>
                     </span>
-                  </span>
-                  <span className="text-zinc-400">→</span>
-                </Link>
+                    <span className="text-zinc-300 dark:text-zinc-700">→</span>
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="flex items-center justify-between gap-4 py-4 transition hover:text-zinc-950 dark:hover:text-zinc-50"
+                  >
+                    <span>
+                      <span className="font-medium">{item.title}</span>
+                      <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
+                        {item.description}
+                      </span>
+                    </span>
+                    <span className="text-zinc-400">→</span>
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -68,18 +82,30 @@ export default function Home() {
       </div>
 
       <section className="flex flex-col gap-4 lg:w-80 lg:shrink-0">
-        {featured.map((card) => (
-          <Link
-            key={card.href}
-            href={card.href}
-            className="rounded-lg border border-zinc-200 p-5 transition hover:border-zinc-400 hover:shadow-sm dark:border-zinc-800 dark:hover:border-zinc-600"
-          >
-            <h2 className="text-lg font-semibold">{card.title}</h2>
-            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-              {card.description}
-            </p>
-          </Link>
-        ))}
+        {featured.map((card) =>
+          card.disabled ? (
+            <div
+              key={card.href}
+              className="rounded-lg border border-zinc-200 p-5 dark:border-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed select-none"
+            >
+              <h2 className="text-lg font-semibold">{card.title}</h2>
+              <p className="mt-1 text-sm text-zinc-500">
+                {card.description}
+              </p>
+            </div>
+          ) : (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="rounded-lg border border-zinc-200 p-5 transition hover:border-zinc-400 hover:shadow-sm dark:border-zinc-800 dark:hover:border-zinc-600"
+            >
+              <h2 className="text-lg font-semibold">{card.title}</h2>
+              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                {card.description}
+              </p>
+            </Link>
+          )
+        )}
       </section>
     </main>
   );
