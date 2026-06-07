@@ -14,36 +14,63 @@ function formatDate(dateStr: string) {
 }
 
 export default function FeedbackManager() {
-  const [feedbacks, setFeedbacks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [correctionRequests, setCorrectionRequests] = useState<any[]>([]);
+  const [inquiries, setInquiries] = useState<any[]>([]);
+  const [correctionLoading, setCorrectionLoading] = useState(true);
+  const [inquiryLoading, setInquiryLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selectedCorrectionStatuses, setSelectedCorrectionStatuses] = useState<string[]>(["보류"]);
   const [selectedInquiryStatuses, setSelectedInquiryStatuses] = useState<string[]>(["보류"]);
 
-  const fetchFeedbacks = async () => {
-    setLoading(true);
+  const fetchCorrectionRequests = async (showLoading = true) => {
+    if (showLoading) setCorrectionLoading(true);
     try {
       const { data, error } = await supabase
         .from("feedbacks")
         .select("*")
+        .eq("type", "정보 수정 요청")
         .order("created_at", { ascending: true }); // 시간 오래된 게 위로
 
       if (error) throw error;
-      setFeedbacks(data || []);
+      setCorrectionRequests(data || []);
     } catch (err: any) {
-      console.error("Detailed error fetching feedbacks:", err);
+      console.error("Detailed error fetching correction requests:", err);
       setErrorMsg(
         err.message ||
         (err.details ? `${err.message} (${err.details})` : JSON.stringify(err)) ||
         "알 수 없는 에러가 발생했습니다."
       );
     } finally {
-      setLoading(false);
+      if (showLoading) setCorrectionLoading(false);
+    }
+  };
+
+  const fetchInquiries = async (showLoading = true) => {
+    if (showLoading) setInquiryLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("feedbacks")
+        .select("*")
+        .neq("type", "정보 수정 요청")
+        .order("created_at", { ascending: true }); // 시간 오래된 게 위로
+
+      if (error) throw error;
+      setInquiries(data || []);
+    } catch (err: any) {
+      console.error("Detailed error fetching inquiries:", err);
+      setErrorMsg(
+        err.message ||
+        (err.details ? `${err.message} (${err.details})` : JSON.stringify(err)) ||
+        "알 수 없는 에러가 발생했습니다."
+      );
+    } finally {
+      if (showLoading) setInquiryLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchFeedbacks();
+    fetchCorrectionRequests(true);
+    fetchInquiries(true);
 
     // Subscribe to DB Realtime Changes
     const channel = supabase
@@ -53,15 +80,28 @@ export default function FeedbackManager() {
         { event: "*", schema: "public", table: "feedbacks" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            setFeedbacks((current) => [...current, payload.new]);
+            const item = payload.new;
+            if (item.type === "정보 수정 요청") {
+              setCorrectionRequests((current) => [...current, item]);
+            } else {
+              setInquiries((current) => [...current, item]);
+            }
           } else if (payload.eventType === "UPDATE") {
-            setFeedbacks((current) =>
-              current.map((f) => (f.id === payload.new.id ? payload.new : f))
-            );
+            const item = payload.new;
+            // Update in correctionRequests if it belongs, otherwise update in inquiries
+            if (item.type === "정보 수정 요청") {
+              setCorrectionRequests((current) =>
+                current.map((f) => (f.id === item.id ? item : f))
+              );
+            } else {
+              setInquiries((current) =>
+                current.map((f) => (f.id === item.id ? item : f))
+              );
+            }
           } else if (payload.eventType === "DELETE") {
-            setFeedbacks((current) =>
-              current.filter((f) => f.id !== payload.old.id)
-            );
+            const oldId = payload.old.id;
+            setCorrectionRequests((current) => current.filter((f) => f.id !== oldId));
+            setInquiries((current) => current.filter((f) => f.id !== oldId));
           }
         }
       )
@@ -82,13 +122,13 @@ export default function FeedbackManager() {
     }
   };
 
-  const correctionRequests = feedbacks
-    .filter((f) => f.type === "정보 수정 요청")
-    .filter((f) => selectedCorrectionStatuses.includes(f.status || "보류"));
+  const displayCorrectionRequests = correctionRequests.filter((f) =>
+    selectedCorrectionStatuses.includes(f.status || "보류")
+  );
 
-  const inquiries = feedbacks
-    .filter((f) => f.type !== "정보 수정 요청")
-    .filter((f) => selectedInquiryStatuses.includes(f.status || "보류"));
+  const displayInquiries = inquiries.filter((f) =>
+    selectedInquiryStatuses.includes(f.status || "보류")
+  );
 
   return (
     <main className="flex flex-1 flex-col gap-6">
@@ -115,8 +155,6 @@ export default function FeedbackManager() {
             * Supabase SQL 에디터에 `feedbacks` 테이블 생성 스크립트를 정상적으로 실행하셨는지 확인해 주세요.
           </p>
         </div>
-      ) : loading ? (
-        <p className="text-sm text-zinc-500 py-4">불러오는 중...</p>
       ) : (
         <div className="flex flex-col gap-8">
           <div>
@@ -149,15 +187,15 @@ export default function FeedbackManager() {
                   ))}
                 </div>
                 <button
-                  onClick={fetchFeedbacks}
-                  disabled={loading}
-                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  onClick={() => fetchCorrectionRequests(true)}
+                  disabled={correctionLoading}
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 disabled:opacity-50"
                 >
-                  새로고침
+                  {correctionLoading ? "불러오는 중..." : "새로고침"}
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+            <div className={`overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800 transition-opacity duration-200 ${correctionLoading ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   <tr>
@@ -168,14 +206,14 @@ export default function FeedbackManager() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-250 dark:divide-zinc-800">
-                  {correctionRequests.length === 0 ? (
+                  {displayCorrectionRequests.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">
+                      <td colSpan={4} className="px-4 py-8 text-center text-zinc-500 text-sm">
                         접수된 내역이 없습니다.
                       </td>
                     </tr>
                   ) : (
-                    correctionRequests.map((item, index) => (
+                    displayCorrectionRequests.map((item, index) => (
                       <tr
                         key={item.id}
                         className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
@@ -264,15 +302,15 @@ export default function FeedbackManager() {
                   ))}
                 </div>
                 <button
-                  onClick={fetchFeedbacks}
-                  disabled={loading}
-                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  onClick={() => fetchInquiries(true)}
+                  disabled={inquiryLoading}
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800 disabled:opacity-50"
                 >
-                  새로고침
+                  {inquiryLoading ? "불러오는 중..." : "새로고침"}
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
+            <div className={`overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800 transition-opacity duration-200 ${inquiryLoading ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   <tr>
@@ -283,14 +321,14 @@ export default function FeedbackManager() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-250 dark:divide-zinc-800">
-                  {inquiries.length === 0 ? (
+                  {displayInquiries.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">
+                      <td colSpan={4} className="px-4 py-8 text-center text-zinc-500 text-sm">
                         접수된 내역이 없습니다.
                       </td>
                     </tr>
                   ) : (
-                    inquiries.map((item, index) => (
+                    displayInquiries.map((item, index) => (
                       <tr
                         key={item.id}
                         className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
@@ -312,7 +350,7 @@ export default function FeedbackManager() {
                               className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
                                 item.status === "반영"
                                   ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-900"
-                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                                  : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
                               }`}
                             >
                               ✓ 반영
@@ -322,7 +360,7 @@ export default function FeedbackManager() {
                               onClick={() => handleUpdateStatus(item.id, "숨김")}
                               className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
                                 item.status === "숨김"
-                                  ? "bg-red-100 text-red-850 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900"
+                                  ? "bg-red-100 text-red-855 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900"
                                   : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
                               }`}
                             >
