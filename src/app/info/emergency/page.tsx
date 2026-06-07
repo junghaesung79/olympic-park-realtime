@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "응급 의료 지원",
+  description: "응급 상황 발생 시 위치와 연락처 안내",
+};
+
 const contacts = [
   { label: "긴급 신고", value: "119 (소방·구급) / 112 (경찰)" },
   { label: "현장 응급의료 부스", value: "평화의광장 본부석 옆 (예시 위치)" },

@@ -1,5 +1,18 @@
 import Link from "next/link";
 
+const staticInfo = [
+  {
+    href: "/info/safety",
+    title: "행동 수칙 · 준비물",
+    description: "현장 참여 시 안전을 위한 행동 수칙 안내",
+  },
+  {
+    href: "/info/emergency",
+    title: "비상 연락망",
+    description: "응급 상황 발생 시 연락할 수 있는 번호와 위치 안내",
+  },
+];
+
 const featured = [
   {
     href: "/map",
@@ -10,24 +23,6 @@ const featured = [
     href: "/links",
     title: "라이브스트림 · SNS",
     description: "공식 라이브 방송과 SNS 계정 모음",
-  },
-];
-
-const staticInfo = [
-  {
-    href: "/info/safety",
-    title: "행동 수칙 · 준비물",
-    description: "참여 방법과 현장에서 지켜야 할 수칙을 안내합니다",
-  },
-  {
-    href: "/info/emergency",
-    title: "응급 의료 지원",
-    description: "응급 상황 시 위치와 연락처를 확인하세요",
-  },
-  {
-    href: "/info/weather",
-    title: "기상 정보 · 대응",
-    description: "우천·혹서 등 기상 상황별 대응 안내",
   },
 ];
 

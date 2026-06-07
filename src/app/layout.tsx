@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const pretendard = localFont({
   src: "../../node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2",
@@ -10,9 +11,29 @@ const pretendard = localFont({
   weight: "45 920",
 });
 
+const description =
+  "올림픽공원 현장 참여자와 동참을 원하는 분들을 위한 실시간·안전 정보 모음";
+
 export const metadata: Metadata = {
-  title: "Olympic Park Realtime",
-  description: "올림픽공원 실시간 정보",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description,
+  openGraph: {
+    title: SITE_NAME,
+    description,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description,
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ko"
       className={`${pretendard.variable} h-full antialiased`}
       suppressHydrationWarning
     >

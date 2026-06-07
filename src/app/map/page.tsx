@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "지도",
+  description: "집결 장소, 주차/대중교통, 화장실·식수·휴게 공간 위치 안내",
+};
+
 const spots = [
   { type: "집결 장소", name: "올림픽공원 평화의광장", note: "메인 집결 지점 (예시)" },
   { type: "주차", name: "공원 제2주차장", note: "임시 통제 가능, 대중교통 권장 (예시)" },

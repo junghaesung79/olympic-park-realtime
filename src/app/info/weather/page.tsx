@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "기상 정보 · 대응",
+  description: "우천·혹서·한파 등 기상 상황별 대응 요령 안내",
+};
+
 const conditions = [
   {
     title: "우천 시",

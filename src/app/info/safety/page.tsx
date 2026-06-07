@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "행동 수칙 · 준비물",
+  description: "현장 참여 시 지켜야 할 행동 수칙과 준비물 안내",
+};
+
 const guidelines = [
   "주최 측 안내에 따라 행동하고, 지정된 구역을 벗어나지 않습니다.",
   "타인을 향한 폭력적 언행이나 물리적 충돌을 하지 않습니다.",

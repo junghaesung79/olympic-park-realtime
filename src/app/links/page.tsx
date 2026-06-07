@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "라이브스트림 · SNS",
+  description: "공식 라이브 방송과 SNS 계정 모음",
+};
+
 const streams = [
   { label: "공식 라이브스트림 (예시)", url: "https://example.com/live" },
 ];
