@@ -105,7 +105,7 @@ export default function FeedbackManager() {
           <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
             <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
               <tr>
-                <th className="px-4 py-3 font-bold">구분</th>
+                <th className="px-4 py-3 font-bold">순번</th>
                 <th className="px-4 py-3 font-bold">작성일시</th>
                 <th className="px-4 py-3 font-bold">내용</th>
                 <th className="px-4 py-3 text-right font-bold">관리</th>
@@ -119,13 +119,13 @@ export default function FeedbackManager() {
                   </td>
                 </tr>
               ) : (
-                feedbacks.map((item) => (
+                feedbacks.map((item, index) => (
                   <tr
                     key={item.id}
                     className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
                   >
                     <td className="px-4 py-4 font-semibold text-zinc-950 dark:text-zinc-50 whitespace-nowrap">
-                      {item.type}
+                      {feedbacks.length - index}
                     </td>
                     <td className="px-4 py-4 text-xs text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
                       {formatDate(item.created_at)}
