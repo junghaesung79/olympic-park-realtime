@@ -111,7 +111,7 @@ export default function FeedbackManager() {
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   <tr>
-                    <th className="px-4 py-3 font-bold w-16">순번</th>
+                    <th className="px-4 py-3 font-bold w-16 text-center">순번</th>
                     <th className="px-4 py-3 font-bold w-36">작성일시</th>
                     <th className="px-4 py-3 font-bold">내용</th>
                     <th className="px-4 py-3 text-right font-bold w-20">관리</th>
@@ -130,13 +130,13 @@ export default function FeedbackManager() {
                         key={item.id}
                         className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
                       >
-                        <td className="px-4 py-4 font-semibold text-zinc-950 dark:text-zinc-50 whitespace-nowrap">
-                          {correctionRequests.length - index}
+                        <td className="px-4 py-4 text-sm font-normal text-zinc-900 dark:text-zinc-100 whitespace-nowrap text-center">
+                          {index + 1}
                         </td>
-                        <td className="px-4 py-4 text-xs text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                        <td className="px-4 py-4 text-sm font-normal text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
                           {formatDate(item.created_at)}
                         </td>
-                        <td className="px-4 py-4 text-zinc-950 dark:text-zinc-50 break-all whitespace-pre-wrap max-w-xl">
+                        <td className="px-4 py-4 text-sm font-normal text-zinc-900 dark:text-zinc-100 break-all whitespace-pre-wrap max-w-xl">
                           {item.content}
                         </td>
                         <td className="px-4 py-4 text-right whitespace-nowrap">
@@ -162,7 +162,7 @@ export default function FeedbackManager() {
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
                   <tr>
-                    <th className="px-4 py-3 font-bold w-16">순번</th>
+                    <th className="px-4 py-3 font-bold w-16 text-center">순번</th>
                     <th className="px-4 py-3 font-bold w-36">작성일시</th>
                     <th className="px-4 py-3 font-bold">내용</th>
                     <th className="px-4 py-3 text-right font-bold w-20">관리</th>
@@ -181,13 +181,13 @@ export default function FeedbackManager() {
                         key={item.id}
                         className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
                       >
-                        <td className="px-4 py-4 font-semibold text-zinc-950 dark:text-zinc-50 whitespace-nowrap">
-                          {inquiries.length - index}
+                        <td className="px-4 py-4 text-sm font-normal text-zinc-900 dark:text-zinc-100 whitespace-nowrap text-center">
+                          {index + 1}
                         </td>
-                        <td className="px-4 py-4 text-xs text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                        <td className="px-4 py-4 text-sm font-normal text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
                           {formatDate(item.created_at)}
                         </td>
-                        <td className="px-4 py-4 text-zinc-950 dark:text-zinc-50 break-all whitespace-pre-wrap max-w-xl">
+                        <td className="px-4 py-4 text-sm font-normal text-zinc-900 dark:text-zinc-100 break-all whitespace-pre-wrap max-w-xl">
                           {item.content}
                         </td>
                         <td className="px-4 py-4 text-right whitespace-nowrap">
