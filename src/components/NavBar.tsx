@@ -5,8 +5,7 @@ const links = [
   { href: "/", label: "홈" },
   { href: "/map", label: "지도" },
   { href: "/info/safety", label: "행동 수칙" },
-  { href: "/info/emergency", label: "응급 의료" },
-  { href: "/info/weather", label: "기상 대응" },
+  { href: "/info/emergency", label: "비상 연락망" },
   { href: "/links", label: "라이브·SNS" },
   { href: "/feedback", label: "수정요청·문의" },
 ];

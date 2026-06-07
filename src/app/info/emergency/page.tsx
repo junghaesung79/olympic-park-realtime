@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "응급 의료 지원",
+  title: "비상 연락망",
   description: "응급 상황 발생 시 위치와 연락처 안내",
 };
 
@@ -21,7 +21,7 @@ export default function EmergencyPage() {
   return (
     <main className="flex flex-1 flex-col gap-8">
       <header>
-        <h1 className="text-2xl font-bold">응급 의료 지원</h1>
+        <h1 className="text-2xl font-bold">비상 연락망</h1>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
           응급 상황 발생 시 아래 정보를 참고하세요. (예시 콘텐츠이며 추후 현장
           확인된 정보로 교체될 예정입니다)

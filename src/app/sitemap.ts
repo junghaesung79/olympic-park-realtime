@@ -6,7 +6,6 @@ const routes = [
   "/map",
   "/info/safety",
   "/info/emergency",
-  "/info/weather",
   "/links",
   "/feedback",
 ];
