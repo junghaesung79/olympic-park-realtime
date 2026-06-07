@@ -18,12 +18,12 @@ const featured = [
   {
     href: "/map",
     title: "지도",
-    description: "올림픽공원 주변 지역 지도와 핸드볼경기장 좌석 및 출입구 안내",
+    description: "올림픽공원 주변 지역 지도와 핸드볼경기장 출입구 안내",
   },
   {
     href: "/links",
     title: "라이브스트림 · SNS (준비 중)",
-    description: "공식 라이브 방송과 SNS 계정 모음",
+    description: "도움이 되는 SNS 계정 모음",
     disabled: true,
   },
   {
