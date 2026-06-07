@@ -17,7 +17,8 @@ export default function FeedbackManager() {
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(["보류"]);
+  const [selectedCorrectionStatuses, setSelectedCorrectionStatuses] = useState<string[]>(["보류"]);
+  const [selectedInquiryStatuses, setSelectedInquiryStatuses] = useState<string[]>(["보류"]);
 
   const fetchFeedbacks = async () => {
     setLoading(true);
@@ -81,12 +82,13 @@ export default function FeedbackManager() {
     }
   };
 
-  const filteredFeedbacks = feedbacks.filter((f) =>
-    selectedStatuses.includes(f.status || "보류")
-  );
+  const correctionRequests = feedbacks
+    .filter((f) => f.type === "정보 수정 요청")
+    .filter((f) => selectedCorrectionStatuses.includes(f.status || "보류"));
 
-  const correctionRequests = filteredFeedbacks.filter((f) => f.type === "정보 수정 요청");
-  const inquiries = filteredFeedbacks.filter((f) => f.type !== "정보 수정 요청");
+  const inquiries = feedbacks
+    .filter((f) => f.type !== "정보 수정 요청")
+    .filter((f) => selectedInquiryStatuses.includes(f.status || "보류"));
 
   return (
     <main className="flex flex-1 flex-col gap-6">
@@ -105,43 +107,6 @@ export default function FeedbackManager() {
         </Link>
       </header>
 
-      {/* Control Panel: Refresh and Filter */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-105">상태 필터:</span>
-          <div className="flex items-center gap-3">
-            {["보류", "반영", "숨김"].map((status) => (
-              <label
-                key={status}
-                className="flex items-center gap-1.5 text-sm cursor-pointer select-none text-zinc-800 dark:text-zinc-200"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedStatuses.includes(status)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedStatuses([...selectedStatuses, status]);
-                    } else {
-                      setSelectedStatuses(selectedStatuses.filter((s) => s !== status));
-                    }
-                  }}
-                  className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-700"
-                />
-                <span>{status}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <button
-          onClick={fetchFeedbacks}
-          disabled={loading}
-          className="flex items-center gap-1 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
-        >
-          <span>새로고침</span>
-        </button>
-      </div>
-
       {errorMsg ? (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-400">
           <p className="font-semibold">피드백 데이터를 불러오지 못했습니다:</p>
@@ -155,7 +120,43 @@ export default function FeedbackManager() {
       ) : (
         <div className="flex flex-col gap-8">
           <div>
-            <h2 className="text-lg font-bold text-zinc-950 dark:text-zinc-50 mb-3">정보 수정 요청</h2>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
+              <h2 className="text-lg font-bold text-zinc-950 dark:text-zinc-50">정보 수정 요청</h2>
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">상태 필터:</span>
+                  {["보류", "반영", "숨김"].map((status) => (
+                    <label
+                      key={status}
+                      className="flex items-center gap-1.5 text-xs cursor-pointer select-none text-zinc-700 dark:text-zinc-300"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedCorrectionStatuses.includes(status)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedCorrectionStatuses([...selectedCorrectionStatuses, status]);
+                          } else {
+                            setSelectedCorrectionStatuses(
+                              selectedCorrectionStatuses.filter((s) => s !== status)
+                            );
+                          }
+                        }}
+                        className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-700 h-3.5 w-3.5"
+                      />
+                      <span>{status}</span>
+                    </label>
+                  ))}
+                </div>
+                <button
+                  onClick={fetchFeedbacks}
+                  disabled={loading}
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                >
+                  새로고침
+                </button>
+              </div>
+            </div>
             <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
@@ -234,7 +235,43 @@ export default function FeedbackManager() {
           </div>
 
           <div>
-            <h2 className="text-lg font-bold text-zinc-950 dark:text-zinc-50 mb-3">문의사항</h2>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
+              <h2 className="text-lg font-bold text-zinc-950 dark:text-zinc-50">문의사항</h2>
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">상태 필터:</span>
+                  {["보류", "반영", "숨김"].map((status) => (
+                    <label
+                      key={status}
+                      className="flex items-center gap-1.5 text-xs cursor-pointer select-none text-zinc-700 dark:text-zinc-300"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedInquiryStatuses.includes(status)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedInquiryStatuses([...selectedInquiryStatuses, status]);
+                          } else {
+                            setSelectedInquiryStatuses(
+                              selectedInquiryStatuses.filter((s) => s !== status)
+                            );
+                          }
+                        }}
+                        className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-700 h-3.5 w-3.5"
+                      />
+                      <span>{status}</span>
+                    </label>
+                  ))}
+                </div>
+                <button
+                  onClick={fetchFeedbacks}
+                  disabled={loading}
+                  className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                >
+                  새로고침
+                </button>
+              </div>
+            </div>
             <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
               <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
                 <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
