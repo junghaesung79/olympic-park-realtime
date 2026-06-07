@@ -27,7 +27,7 @@ function FormSection({
       const typeLabel = id === "correction-request" ? "정보 수정 요청" : "문의사항";
       const { error } = await supabase
         .from("feedbacks")
-        .insert([{ type: typeLabel, content: value }]);
+        .insert([{ type: typeLabel, content: value, status: "보류" }]);
 
       if (error) throw error;
 

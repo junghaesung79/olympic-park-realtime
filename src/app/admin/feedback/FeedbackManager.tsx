@@ -17,33 +17,34 @@ export default function FeedbackManager() {
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [selectedStatuses, setSelectedStatuses] = useState<string[]>(["보류"]);
+
+  const fetchFeedbacks = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("feedbacks")
+        .select("*")
+        .order("created_at", { ascending: true }); // 시간 오래된 게 위로
+
+      if (error) throw error;
+      setFeedbacks(data || []);
+    } catch (err: any) {
+      console.error("Detailed error fetching feedbacks:", err);
+      setErrorMsg(
+        err.message ||
+        (err.details ? `${err.message} (${err.details})` : JSON.stringify(err)) ||
+        "알 수 없는 에러가 발생했습니다."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // 1. Fetch initial feedbacks
-    const fetchFeedbacks = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("feedbacks")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (error) throw error;
-        setFeedbacks(data || []);
-      } catch (err: any) {
-        console.error("Detailed error fetching feedbacks:", err);
-        setErrorMsg(
-          err.message ||
-          (err.details ? `${err.message} (${err.details})` : JSON.stringify(err)) ||
-          "알 수 없는 에러가 발생했습니다."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFeedbacks();
 
-    // 2. Subscribe to DB Realtime Changes
+    // Subscribe to DB Realtime Changes
     const channel = supabase
       .channel("admin-feedback-page-realtime")
       .on(
@@ -51,7 +52,11 @@ export default function FeedbackManager() {
         { event: "*", schema: "public", table: "feedbacks" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            setFeedbacks((current) => [payload.new, ...current]);
+            setFeedbacks((current) => [...current, payload.new]);
+          } else if (payload.eventType === "UPDATE") {
+            setFeedbacks((current) =>
+              current.map((f) => (f.id === payload.new.id ? payload.new : f))
+            );
           } else if (payload.eventType === "DELETE") {
             setFeedbacks((current) =>
               current.filter((f) => f.id !== payload.old.id)
@@ -66,15 +71,22 @@ export default function FeedbackManager() {
     };
   }, []);
 
-  const handleDeleteFeedback = async (id: string) => {
-    const { error } = await supabase.from("feedbacks").delete().eq("id", id);
+  const handleUpdateStatus = async (id: string, newStatus: string) => {
+    const { error } = await supabase
+      .from("feedbacks")
+      .update({ status: newStatus })
+      .eq("id", id);
     if (error) {
-      alert("삭제 실패: " + error.message);
+      alert("상태 변경 실패: " + error.message);
     }
   };
 
-  const correctionRequests = feedbacks.filter((f) => f.type === "정보 수정 요청");
-  const inquiries = feedbacks.filter((f) => f.type !== "정보 수정 요청");
+  const filteredFeedbacks = feedbacks.filter((f) =>
+    selectedStatuses.includes(f.status || "보류")
+  );
+
+  const correctionRequests = filteredFeedbacks.filter((f) => f.type === "정보 수정 요청");
+  const inquiries = filteredFeedbacks.filter((f) => f.type !== "정보 수정 요청");
 
   return (
     <main className="flex flex-1 flex-col gap-6">
@@ -92,6 +104,43 @@ export default function FeedbackManager() {
           어드민 홈으로
         </Link>
       </header>
+
+      {/* Control Panel: Refresh and Filter */}
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-lg bg-zinc-50 p-4 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center gap-4">
+          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-105">상태 필터:</span>
+          <div className="flex items-center gap-3">
+            {["보류", "반영", "숨김"].map((status) => (
+              <label
+                key={status}
+                className="flex items-center gap-1.5 text-sm cursor-pointer select-none text-zinc-800 dark:text-zinc-200"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedStatuses.includes(status)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedStatuses([...selectedStatuses, status]);
+                    } else {
+                      setSelectedStatuses(selectedStatuses.filter((s) => s !== status));
+                    }
+                  }}
+                  className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 dark:border-zinc-700"
+                />
+                <span>{status}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={fetchFeedbacks}
+          disabled={loading}
+          className="flex items-center gap-1 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-850 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        >
+          <span>새로고침</span>
+        </button>
+      </div>
 
       {errorMsg ? (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-400">
@@ -114,7 +163,7 @@ export default function FeedbackManager() {
                     <th className="px-4 py-3 font-bold w-16 text-center">순번</th>
                     <th className="px-4 py-3 font-bold w-36">작성일시</th>
                     <th className="px-4 py-3 font-bold">내용</th>
-                    <th className="px-4 py-3 text-right font-bold w-20">관리</th>
+                    <th className="px-4 py-3 text-right font-bold w-48">관리</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-250 dark:divide-zinc-800">
@@ -140,13 +189,41 @@ export default function FeedbackManager() {
                           {item.content}
                         </td>
                         <td className="px-4 py-4 text-right whitespace-nowrap">
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteFeedback(item.id)}
-                            className="text-xs font-medium text-red-650 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:underline"
-                          >
-                            삭제
-                          </button>
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(item.id, "반영")}
+                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                                item.status === "반영"
+                                  ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-900"
+                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              ✓ 반영
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(item.id, "숨김")}
+                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                                item.status === "숨김"
+                                  ? "bg-red-100 text-red-850 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900"
+                                  : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              ✗ 숨김
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(item.id, "보류")}
+                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                                item.status === "보류" || !item.status
+                                  ? "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
+                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              = 보류
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -165,7 +242,7 @@ export default function FeedbackManager() {
                     <th className="px-4 py-3 font-bold w-16 text-center">순번</th>
                     <th className="px-4 py-3 font-bold w-36">작성일시</th>
                     <th className="px-4 py-3 font-bold">내용</th>
-                    <th className="px-4 py-3 text-right font-bold w-20">관리</th>
+                    <th className="px-4 py-3 text-right font-bold w-48">관리</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-250 dark:divide-zinc-800">
@@ -191,13 +268,41 @@ export default function FeedbackManager() {
                           {item.content}
                         </td>
                         <td className="px-4 py-4 text-right whitespace-nowrap">
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteFeedback(item.id)}
-                            className="text-xs font-medium text-red-650 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:underline"
-                          >
-                            삭제
-                          </button>
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(item.id, "반영")}
+                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                                item.status === "반영"
+                                  ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-950/40 dark:text-green-300 dark:border-green-900"
+                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              ✓ 반영
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(item.id, "숨김")}
+                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                                item.status === "숨김"
+                                  ? "bg-red-100 text-red-850 border-red-200 dark:bg-red-950/40 dark:text-red-300 dark:border-red-900"
+                                  : "bg-white text-zinc-655 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              ✗ 숨김
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateStatus(item.id, "보류")}
+                              className={`rounded px-2 py-1 text-xs font-medium border transition-colors ${
+                                item.status === "보류" || !item.status
+                                  ? "bg-zinc-200 text-zinc-800 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600"
+                                  : "bg-white text-zinc-650 border-zinc-250 hover:bg-zinc-50 dark:bg-zinc-850 dark:text-zinc-400 dark:border-zinc-750 dark:hover:bg-zinc-800"
+                              }`}
+                            >
+                              = 보류
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
