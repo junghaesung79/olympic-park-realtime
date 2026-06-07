@@ -91,10 +91,6 @@ export default function FeedbackManager() {
         </div>
       ) : loading ? (
         <p className="text-sm text-zinc-500 py-4">불러오는 중...</p>
-      ) : feedbacks.length === 0 ? (
-        <p className="text-sm text-zinc-400 py-8 text-center border border-zinc-200 rounded-lg dark:border-zinc-800">
-          접수된 내역이 없습니다.
-        </p>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
           <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
@@ -107,31 +103,39 @@ export default function FeedbackManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-250 dark:divide-zinc-800">
-              {feedbacks.map((item) => (
-                <tr
-                  key={item.id}
-                  className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
-                >
-                  <td className="px-4 py-4 font-semibold text-zinc-900 dark:text-zinc-200 whitespace-nowrap">
-                    {item.type}
-                  </td>
-                  <td className="px-4 py-4 break-all whitespace-pre-wrap max-w-xl">
-                    {item.content}
-                  </td>
-                  <td className="px-4 py-4 text-xs text-zinc-400 whitespace-nowrap">
-                    {new Date(item.created_at).toLocaleString("ko-KR")}
-                  </td>
-                  <td className="px-4 py-4 text-right whitespace-nowrap">
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteFeedback(item.id)}
-                      className="text-xs text-red-500 hover:underline"
-                    >
-                      삭제
-                    </button>
+              {feedbacks.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-4 py-8 text-center text-zinc-400">
+                    접수된 내역이 없습니다.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                feedbacks.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
+                  >
+                    <td className="px-4 py-4 font-semibold text-zinc-900 dark:text-zinc-200 whitespace-nowrap">
+                      {item.type}
+                    </td>
+                    <td className="px-4 py-4 break-all whitespace-pre-wrap max-w-xl">
+                      {item.content}
+                    </td>
+                    <td className="px-4 py-4 text-xs text-zinc-400 whitespace-nowrap">
+                      {new Date(item.created_at).toLocaleString("ko-KR")}
+                    </td>
+                    <td className="px-4 py-4 text-right whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteFeedback(item.id)}
+                        className="text-xs text-red-500 hover:underline"
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
