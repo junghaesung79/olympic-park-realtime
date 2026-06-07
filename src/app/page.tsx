@@ -37,9 +37,32 @@ export default function Home() {
       <section>
         <h1 className="text-3xl font-bold">올림픽공원 실시간 정보</h1>
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          현장 참여자와 동참을 원하는 분들을 위한 실시간·안전 정보를 제공합니다.
-          아래 메뉴에서 필요한 정보를 확인하세요.
+          현장 참여자와 동참을 원하는 분들을 위한 정보를 제공합니다.<br />
+          이 사이트에 있는 정보 또한 사실이 아닐 수도 있습니다.<br />
+          자신과 주변 사람들의 안전을 최우선으로 생각해주세요.
         </p>
+      </section>
+
+      <section>
+        <h2 className="text-lg font-semibold">정보</h2>
+        <ul className="mt-3 divide-y divide-zinc-200 dark:divide-zinc-800">
+          {staticInfo.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="flex items-center justify-between gap-4 py-4 transition hover:text-zinc-950 dark:hover:text-zinc-50"
+              >
+                <span>
+                  <span className="font-medium">{item.title}</span>
+                  <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
+                    {item.description}
+                  </span>
+                </span>
+                <span className="text-zinc-400">→</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -55,28 +78,6 @@ export default function Home() {
             </p>
           </Link>
         ))}
-      </section>
-
-      <section>
-        <h2 className="text-lg font-semibold">정적인 정보</h2>
-        <ul className="mt-3 divide-y divide-zinc-200 rounded-lg border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
-          {staticInfo.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
-              >
-                <span>
-                  <span className="font-medium">{item.title}</span>
-                  <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
-                    {item.description}
-                  </span>
-                </span>
-                <span className="text-zinc-400">→</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
     </main>
   );
