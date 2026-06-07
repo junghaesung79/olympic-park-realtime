@@ -8,6 +8,7 @@ const routes = [
   "/info/emergency",
   "/info/weather",
   "/links",
+  "/feedback",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

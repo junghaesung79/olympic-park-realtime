@@ -8,6 +8,7 @@ const links = [
   { href: "/info/emergency", label: "응급 의료" },
   { href: "/info/weather", label: "기상 대응" },
   { href: "/links", label: "라이브·SNS" },
+  { href: "/feedback", label: "수정요청·문의" },
 ];
 
 export default function NavBar() {

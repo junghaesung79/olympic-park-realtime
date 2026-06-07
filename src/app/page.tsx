@@ -24,6 +24,11 @@ const featured = [
     title: "라이브스트림 · SNS",
     description: "공식 라이브 방송과 SNS 계정 모음",
   },
+  {
+    href: "/feedback",
+    title: "정보 수정 요청 · 문의사항",
+    description: "잘못된 정보 수정 요청이나 궁금한 점을 남겨주세요",
+  },
 ];
 
 export default function Home() {
