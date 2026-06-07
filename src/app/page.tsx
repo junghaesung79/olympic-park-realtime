@@ -16,6 +16,12 @@ const staticInfo = [
 
 const featured = [
   {
+    href: "/share",
+    title: "실시간 정보 공유 (준비 중)",
+    description: "현장 상황을 실시간으로 공유하고 확인할 수 있습니다.",
+    disabled: true,
+  },
+  {
     href: "/map",
     title: "지도",
     description: "올림픽공원 주변 지역 지도와 핸드볼경기장 출입구 안내",
@@ -35,8 +41,8 @@ const featured = [
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col gap-8 lg:flex-row lg:items-start">
-      <div className="flex flex-1 flex-col gap-10">
+    <main className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+      <div className="flex flex-col gap-10">
         <section>
           <h1 className="text-3xl font-bold">올림픽공원 실시간 정보</h1>
           <p className="mt-2 text-zinc-600 dark:text-zinc-400">
@@ -63,8 +69,8 @@ export default function Home() {
                   </div>
                 ) : (
                   <Link
-                    href={item.href}
-                    className="flex items-center justify-between gap-4 py-4 transition hover:text-zinc-950 dark:hover:text-zinc-50"
+                     href={item.href}
+                     className="flex items-center justify-between gap-4 py-4 transition hover:text-zinc-950 dark:hover:text-zinc-50"
                   >
                     <span>
                       <span className="font-medium">{item.title}</span>
@@ -81,7 +87,7 @@ export default function Home() {
         </section>
       </div>
 
-      <section className="flex flex-col gap-4 lg:w-80 lg:shrink-0">
+      <section className="flex flex-col gap-4">
         {featured.map((card) =>
           card.disabled ? (
             <div
