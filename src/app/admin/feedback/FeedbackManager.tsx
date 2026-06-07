@@ -4,6 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr);
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return `${month}.${day} ${hours}:${minutes}`;
+}
+
 export default function FeedbackManager() {
   const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,18 +103,18 @@ export default function FeedbackManager() {
       ) : (
         <div className="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
           <table className="w-full text-left text-sm text-zinc-650 dark:text-zinc-400">
-            <thead className="bg-zinc-50 text-xs uppercase text-zinc-700 dark:bg-zinc-900 dark:text-zinc-350">
+            <thead className="bg-zinc-100 text-xs uppercase text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
               <tr>
-                <th className="px-4 py-3">구분</th>
-                <th className="px-4 py-3">작성일시</th>
-                <th className="px-4 py-3">내용</th>
-                <th className="px-4 py-3 text-right">관리</th>
+                <th className="px-4 py-3 font-bold">구분</th>
+                <th className="px-4 py-3 font-bold">작성일시</th>
+                <th className="px-4 py-3 font-bold">내용</th>
+                <th className="px-4 py-3 text-right font-bold">관리</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-250 dark:divide-zinc-800">
               {feedbacks.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-zinc-400">
+                  <td colSpan={4} className="px-4 py-8 text-center text-zinc-500">
                     접수된 내역이 없습니다.
                   </td>
                 </tr>
@@ -115,20 +124,20 @@ export default function FeedbackManager() {
                     key={item.id}
                     className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30"
                   >
-                    <td className="px-4 py-4 font-semibold text-zinc-900 dark:text-zinc-200 whitespace-nowrap">
+                    <td className="px-4 py-4 font-semibold text-zinc-950 dark:text-zinc-50 whitespace-nowrap">
                       {item.type}
                     </td>
-                    <td className="px-4 py-4 text-xs text-zinc-400 whitespace-nowrap">
-                      {new Date(item.created_at).toLocaleString("ko-KR")}
+                    <td className="px-4 py-4 text-xs text-zinc-900 dark:text-zinc-100 whitespace-nowrap">
+                      {formatDate(item.created_at)}
                     </td>
-                    <td className="px-4 py-4 break-all whitespace-pre-wrap max-w-xl">
+                    <td className="px-4 py-4 text-zinc-950 dark:text-zinc-50 break-all whitespace-pre-wrap max-w-xl">
                       {item.content}
                     </td>
                     <td className="px-4 py-4 text-right whitespace-nowrap">
                       <button
                         type="button"
                         onClick={() => handleDeleteFeedback(item.id)}
-                        className="text-xs text-red-500 hover:underline"
+                        className="text-xs font-medium text-red-650 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 hover:underline"
                       >
                         삭제
                       </button>
