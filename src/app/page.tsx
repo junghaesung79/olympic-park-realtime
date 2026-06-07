@@ -1,11 +1,19 @@
 import Link from "next/link";
 
-const cards = [
+const featured = [
   {
     href: "/map",
     title: "지도",
     description: "집결 장소, 주차/대중교통, 화장실·식수·휴게 공간 위치",
   },
+  {
+    href: "/links",
+    title: "라이브스트림 · SNS",
+    description: "공식 라이브 방송과 SNS 계정 모음",
+  },
+];
+
+const staticInfo = [
   {
     href: "/info/safety",
     title: "행동 수칙 · 준비물",
@@ -21,16 +29,11 @@ const cards = [
     title: "기상 정보 · 대응",
     description: "우천·혹서 등 기상 상황별 대응 안내",
   },
-  {
-    href: "/links",
-    title: "라이브스트림 · SNS",
-    description: "공식 라이브 방송과 SNS 계정 모음",
-  },
 ];
 
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col gap-8">
+    <main className="flex flex-1 flex-col gap-10">
       <section>
         <h1 className="text-3xl font-bold">올림픽공원 실시간 정보</h1>
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">
@@ -40,7 +43,7 @@ export default function Home() {
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {cards.map((card) => (
+        {featured.map((card) => (
           <Link
             key={card.href}
             href={card.href}
@@ -52,6 +55,28 @@ export default function Home() {
             </p>
           </Link>
         ))}
+      </section>
+
+      <section>
+        <h2 className="text-lg font-semibold">정적인 정보</h2>
+        <ul className="mt-3 divide-y divide-zinc-200 rounded-lg border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+          {staticInfo.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-zinc-50 dark:hover:bg-zinc-900"
+              >
+                <span>
+                  <span className="font-medium">{item.title}</span>
+                  <span className="mt-0.5 block text-sm text-zinc-600 dark:text-zinc-400">
+                    {item.description}
+                  </span>
+                </span>
+                <span className="text-zinc-400">→</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
